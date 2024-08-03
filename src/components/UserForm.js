@@ -2,16 +2,16 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const USERS_URL = '/users';
 
 const UserForm = ({editData}) => {
+    const axiosPrivate = useAxiosPrivate();
     const userRef = useRef();
     const errRef = useRef();    
-    const [data, setData] = useState(false);
     const [empid, setEmpid] = useState('');
 
     const [user, setUser] = useState('');
@@ -66,15 +66,9 @@ const UserForm = ({editData}) => {
             setErrMsg("Invalid Entry");
             return;
         }
-        //console.log([user,pwd]);
+        console.log(JSON.stringify({ id:empid, username:user, password:pwd }));
         try {
-            const response = await useAxiosPrivate.put(USERS_URL,
-                JSON.stringify({ user, pwd }),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
-                }
-            );
+            const response = await axiosPrivate.put(USERS_URL, JSON.stringify({ id:empid, username:user, password:pwd }));
             // TODO: remove console.logs before deployment
             console.log(JSON.stringify(response?.data));
             //console.log(JSON.stringify(response))
@@ -133,8 +127,6 @@ const UserForm = ({editData}) => {
                             Must begin with a letter.<br />
                             Letters, numbers, underscores, hyphens allowed.
                         </p>
-
-
                         <label htmlFor="password">
                             Password (e.g Abcd1234@):
                             <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
@@ -157,7 +149,12 @@ const UserForm = ({editData}) => {
                             Must include uppercase and lowercase letters, a number and a special character.<br />
                             Allowed special characters : <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">% </span>
                         </p>
-
+                     
+                        <input
+                            type="hidden"
+                            id="id"
+                            value={empid}
+                        />
 
                         <label htmlFor="confirm_pwd">
                             Confirm Password:
