@@ -3,3 +3,7 @@ this code is made based on tutorial on [YouTube Tutorial](https://www.youtube.co
 usr admin
 user: test2
 password: pass1234
+
+login and edit user API used is API on node js Project
+
+get product from fakestore is in http://localhost:3000/editor
