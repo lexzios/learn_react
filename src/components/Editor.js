@@ -41,13 +41,31 @@ const Editor = () => {
             <h1>Editors Page</h1>
             <br />
             <p>You must have been assigned an Editor role.</p>
+            
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                </tr>        
             {users?.length
                 ? (
-                    <ul>
-                        {users.map((user, i) => <li key={i}>{user?.title} </li>)}
-                    </ul>
+                    (() => {
+                        const arr = [];
+                        for (let i = 0; i < users?.length; i++) {
+                            arr.push(
+                                <tr>
+                                    <td key={i}>{users[i].title}</td>
+                                    <td key={i}>{users[i].price}</td>
+                                    <td key={i}>{users[i].category}</td>
+                                </tr>
+                            );
+                        }
+                        return arr;
+                    })()
                 ) : <p>no data / Loading Please Wait</p>
-            }
+            }            
+            </table>
             <div className="flexGrow">
                 <Link to="/">Home</Link>
             </div>
